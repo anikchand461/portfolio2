@@ -108,7 +108,7 @@
       .marquee-content {
         display: flex;
         flex-wrap: nowrap;
-        animation: scroll-left 25s linear infinite;
+        animation: scroll-left 20s linear infinite;
         width: max-content;
         will-change: transform;
         backface-visibility: hidden;
@@ -118,18 +118,27 @@
       /* ── TICKER ONLY: nowrap keeps text on single line ── */
       .marquee-content.ticker-line {
         white-space: nowrap;
+        animation: scroll-left 10s linear infinite;
         gap: 0;
       }
 
       /* ── BLOG CARDS: fixed width + margin for gap ── */
       .blog-card {
         white-space: normal;
-        width: 320px !important;
-        min-width: 320px !important;
-        max-width: 320px !important;
+        width: 260px !important;
+        min-width: 260px !important;
+        max-width: 260px !important;
         flex-shrink: 0 !important;
-        margin-right: 2rem;
+        margin-right: 1.25rem;
         display: block;
+      }
+      @media (min-width: 480px) {
+        .blog-card {
+          width: 300px !important;
+          min-width: 300px !important;
+          max-width: 300px !important;
+          margin-right: 1.5rem;
+        }
       }
       @media (min-width: 768px) {
         .blog-card {
@@ -175,7 +184,6 @@
       }
       .skills-grid-cell { min-width: 0; overflow: hidden; }
       .skills-grid-cell .skill-name { font-size: clamp(0.75rem, 2vw, 1.25rem); word-break: break-word; text-align: center; }
-      @media (max-width: 640px) { .blog-card { width: 85vw !important; max-width: 340px !important; } }
       @media (max-width: 400px) { .timeline-entry { padding-left: 2rem !important; } .timeline-dot { left: -10px !important; } }
       @media (max-width: 640px) { .contact-grid { grid-template-columns: 1fr !important; gap: 1.5rem !important; } }
       @media (max-width: 640px) { .footer-grid { grid-template-columns: 1fr !important; gap: 2rem !important; } }
