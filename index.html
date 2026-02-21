@@ -543,7 +543,8 @@
               </div>
               <div class="mb-6">
                 <div class="border-2 border-neo-purple/30 p-3 overflow-hidden bg-black">
-                  <img src="https://codeforces-readme-stats.vercel.app/api/card?username=anikchand461&theme=github_dark" alt="Codeforces Stats" class="w-full h-auto object-contain" />
+                  <img src="https://codeforces-readme-stats.vercel.app/api/card?username=anikchand461&theme=github_dark&t=1"
+     id="cf-stats-img" class="w-full h-auto object-contain" />
                 </div>
               </div>
               <div class="mt-auto flex items-center justify-between text-neo-purple p-3 border-2 border-white/10 bg-neo-black font-mono text-[11px]">
@@ -950,6 +951,12 @@
           }
         });
       });
+
+// Force Codeforces stats to reload fresh on every visit
+var cfImg = document.getElementById('cf-stats-img');
+if (cfImg) {
+  cfImg.src = cfImg.src.replace('&t=1', '&t=' + Date.now());
+}
     </script>
   </body>
 </html>
