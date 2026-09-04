@@ -705,5 +705,5 @@
   /* ------------------------------------------------------------------ */
   /*  6. INIT                                                             */
   /* ------------------------------------------------------------------ */
-  document.addEventListener("DOMContentLoaded", buildUI);
+  if (document.readyState === "loading") { document.addEventListener("DOMContentLoaded", buildUI); } else { buildUI(); }
 })();

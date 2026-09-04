@@ -265,10 +265,15 @@
       </div>
     </div>
   `;
-  document.addEventListener("DOMContentLoaded", () => {
+  function __searchWidgetInit1() {
     document.body.appendChild(overlay);
     injectTriggerButton();
-  });
+  }
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", __searchWidgetInit1);
+  } else {
+    __searchWidgetInit1();
+  }
 
   const resultsEl = () => document.getElementById("site-search-results");
   const inputEl = () => document.getElementById("site-search-input");
@@ -598,13 +603,18 @@
     }
   });
 
-  document.addEventListener("DOMContentLoaded", () => {
+  function __searchWidgetInit2() {
     overlay.addEventListener("click", (e) => {
       if (e.target === overlay) closeSearch();
     });
     document.getElementById("site-search-close").addEventListener("click", closeSearch);
     inputEl().addEventListener("input", (e) => renderResults(e.target.value));
-  });
+  }
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", __searchWidgetInit2);
+  } else {
+    __searchWidgetInit2();
+  }
 
   /* ------------------------------------------------------------------ */
   /*  8. PUBLIC API — so other widgets (e.g. the portfolio assistant)     */

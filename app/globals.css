@@ -1,0 +1,258 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+      html,
+      body {
+        overflow-x: hidden;
+        max-width: 100%;
+      }
+      body {
+        cursor: none;
+        background-color: #fffdf5;
+        background-image:
+          radial-gradient(#000 1px, transparent 1px),
+          linear-gradient(to right, #e5e5e5 1px, transparent 1px),
+          linear-gradient(to bottom, #e5e5e5 1px, transparent 1px);
+        background-size:
+          40px 40px,
+          100px 100px,
+          100px 100px;
+      }
+      @media (max-width: 1023px) {
+        body {
+          cursor: auto;
+        }
+      }
+      * {
+        box-sizing: border-box;
+      }
+      section,
+      header,
+      footer,
+      nav,
+      div,
+      article {
+        max-width: 100vw;
+      }
+
+      #cursor {
+        pointer-events: none;
+        position: fixed;
+        z-index: 9999;
+        mix-blend-mode: difference;
+        transform: translate(-50%, -50%);
+        transition:
+          width 0.2s,
+          height 0.2s,
+          background-color 0.2s;
+      }
+
+      /* ── TICKER & BLOG: shared marquee base ── */
+      .marquee-container {
+        overflow: hidden;
+        width: 100%;
+        max-width: 100vw;
+      }
+      .marquee-content {
+        display: flex;
+        flex-wrap: nowrap;
+        animation: scroll-left 20s linear infinite;
+        width: max-content;
+        will-change: transform;
+        backface-visibility: hidden;
+      }
+      .marquee-container:hover .marquee-content {
+        animation-play-state: paused;
+      }
+
+      /* ── TICKER ONLY: nowrap keeps text on single line ── */
+      .marquee-content.ticker-line {
+        white-space: nowrap;
+        animation: scroll-left 10s linear infinite;
+        gap: 0;
+      }
+
+      /* ── BLOG CARDS: fixed width + margin for gap ── */
+      .blog-card {
+        white-space: normal;
+        width: 260px !important;
+        min-width: 260px !important;
+        max-width: 260px !important;
+        flex-shrink: 0 !important;
+        margin-right: 1.25rem;
+        display: block;
+      }
+      @media (min-width: 480px) {
+        .blog-card {
+          width: 300px !important;
+          min-width: 300px !important;
+          max-width: 300px !important;
+          margin-right: 1.5rem;
+        }
+      }
+      @media (min-width: 768px) {
+        .blog-card {
+          width: 400px !important;
+          min-width: 400px !important;
+          max-width: 400px !important;
+          margin-right: 2rem;
+        }
+      }
+      @keyframes scroll-left {
+        from {
+          transform: translateX(0);
+        }
+        to {
+          transform: translateX(-50%);
+        }
+      }
+
+      .reveal {
+        opacity: 0;
+        transform: translateY(40px);
+        transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+      }
+      .reveal.active {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .glitch-hover:hover {
+        animation: glitch-anim 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both
+          infinite;
+        color: #ff2a2a;
+      }
+      @keyframes glitch-anim {
+        0% {
+          transform: translate(0);
+        }
+        20% {
+          transform: translate(-2px, 2px);
+        }
+        40% {
+          transform: translate(-2px, -2px);
+        }
+        60% {
+          transform: translate(2px, 2px);
+        }
+        80% {
+          transform: translate(2px, -2px);
+        }
+        100% {
+          transform: translate(0);
+        }
+      }
+
+      #mobile-menu {
+        display: none;
+        flex-direction: column;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: #121212;
+        z-index: 999;
+        align-items: center;
+        justify-content: center;
+        gap: 2rem;
+        overflow: hidden;
+      }
+      #mobile-menu.open {
+        display: flex;
+      }
+
+      @media (max-width: 480px) {
+        .hero-title {
+          font-size: 18vw !important;
+          line-height: 0.85 !important;
+        }
+        .hero-subtitle {
+          font-size: 1rem !important;
+        }
+      }
+      .skills-grid-cell {
+        min-width: 0;
+        overflow: hidden;
+      }
+      .skills-grid-cell .skill-name {
+        font-size: clamp(0.75rem, 2vw, 1.25rem);
+        word-break: break-word;
+        text-align: center;
+      }
+      @media (max-width: 400px) {
+        .timeline-entry {
+          padding-left: 2rem !important;
+        }
+        .timeline-dot {
+          left: -10px !important;
+        }
+      }
+      @media (max-width: 640px) {
+        .contact-grid {
+          grid-template-columns: 1fr !important;
+          gap: 1.5rem !important;
+        }
+      }
+      @media (max-width: 640px) {
+        .footer-grid {
+          grid-template-columns: 1fr !important;
+          gap: 2rem !important;
+        }
+      }
+      @media (max-width: 400px) {
+        .section-px {
+          padding-left: 1rem !important;
+          padding-right: 1rem !important;
+        }
+      }
+      @media (max-width: 1023px) {
+        .stats-col {
+          height: auto !important;
+        }
+      }
+      #hamburger {
+        cursor: pointer;
+      }
+      li,
+      p {
+        word-break: break-word;
+        overflow-wrap: anywhere;
+      }
+      .break-all {
+        word-break: break-all;
+      }
+
+      @keyframes check {
+        0% {
+          transform: scale(0.4);
+          opacity: 0;
+        }
+        60% {
+          transform: scale(1.3);
+          opacity: 1;
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+      @keyframes check-ring {
+        0% {
+          box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.8);
+        }
+        70% {
+          box-shadow: 0 0 0 30px rgba(34, 197, 94, 0);
+        }
+        100% {
+          box-shadow: 0 0 0 0 rgba(34, 197, 94, 0);
+        }
+      }
+      .animate-check {
+        animation: check 0.8s ease-out;
+      }
+      .animate-check-ring {
+        animation: check-ring 1.4s ease-out;
+      }
+    
