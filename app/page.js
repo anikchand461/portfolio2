@@ -599,6 +599,20 @@ export default function Home() {
             </div>
           </div>
           <div
+            className="skills-grid-cell group h-20 md:h-24 border-r-2 border-b-2 border-white/20 bg-neo-black hover:bg-neo-blue transition-all duration-300 hover:z-10 relative cursor-hover flex flex-col items-center justify-center p-2"
+          >
+            <div
+              className="text-neo-green group-hover:text-black font-mono text-[9px] md:text-xs mb-1 opacity-50 uppercase"
+            >
+              LANGUAGE
+            </div>
+            <div
+              className="skill-name text-white group-hover:text-black font-black font-display uppercase"
+            >
+              Go
+            </div>
+          </div>
+          <div
             className="skills-grid-cell group h-20 md:h-24 border-r-2 border-b-2 border-white/20 bg-neo-black hover:bg-neo-green transition-all duration-300 hover:z-10 relative cursor-hover flex flex-col items-center justify-center p-2"
           >
             <div
@@ -638,6 +652,20 @@ export default function Home() {
               className="skill-name text-white group-hover:text-black font-black font-display uppercase"
             >
               Scikit-learn
+            </div>
+          </div>
+          <div
+            className="skills-grid-cell group h-20 md:h-24 border-r-2 border-b-2 border-white/20 bg-neo-black hover:bg-neo-yellow transition-all duration-300 hover:z-10 relative cursor-hover flex flex-col items-center justify-center p-2"
+          >
+            <div
+              className="text-neo-green group-hover:text-black font-mono text-[9px] md:text-xs mb-1 opacity-50 uppercase"
+            >
+              LIBRARIES
+            </div>
+            <div
+              className="skill-name text-white group-hover:text-black font-black font-display uppercase"
+            >
+              Gio
             </div>
           </div>
           <div
@@ -1493,6 +1521,8 @@ export default function Home() {
                   >Developer tool</span
                 ><span className="bg-neo-black text-white px-2 py-1"
                   >AI</span
+                ><span className="bg-neo-black text-white px-2 py-1"
+                  >Go</span
                 >
               </div>
             </div>
