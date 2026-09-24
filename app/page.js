@@ -873,6 +873,46 @@ export default function Home() {
 
       <div className="reveal relative pl-8 md:pl-16 timeline-entry">
         <div
+          className="timeline-dot absolute -left-[14px] top-2 w-6 h-6 bg-neo-red border-4 border-black"
+        ></div>
+        <div
+          className="bg-white border-4 border-black p-4 md:p-6 shadow-hard hover:shadow-hard-xl transition-all"
+        >
+          <div
+            className="flex flex-col md:flex-row justify-between items-start md:items-center border-b-2 border-dashed border-gray-300 pb-4 mb-4 gap-2"
+          >
+            <h3 className="text-2xl md:text-3xl font-black uppercase">
+                Artificial Intelligence Intern
+            </h3>
+            <span
+              className="font-mono font-bold bg-neo-black text-white px-2 py-1 text-sm whitespace-nowrap"
+              >Aug 2026 - Present</span
+            >
+          </div>
+          <p
+            className="font-mono text-lg md:text-xl mb-2 text-neo-red font-bold"
+          >
+            @ Torque Communications
+          </p>
+          <ul
+            className="list-disc list-inside font-mono text-sm md:text-base text-gray-700 space-y-1"
+          >
+              <li>
+                Developing an AI-powered organizational communication platform
+                for modeling hierarchical structures, communication
+                relationships, and LLM-based agent interactions.
+              </li>
+              <li>
+                Building graph-based communication workflows with
+                relationship-level protocols for information sharing,
+                escalation, and controlled agent-to-agent communication.
+              </li>
+          </ul>
+        </div>
+      </div>
+
+      <div className="reveal relative pl-8 md:pl-16 timeline-entry">
+        <div
           className="timeline-dot absolute -left-[14px] top-2 w-6 h-6 bg-neo-blue border-4 border-black"
         ></div>
         <div
@@ -945,6 +985,46 @@ export default function Home() {
               <li>
                 It is a CLI project written in Go for task management using
                 terminal.
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div className="reveal relative pl-8 md:pl-16 timeline-entry">
+          <div
+            className="timeline-dot absolute -left-[14px] top-2 w-6 h-6 bg-neo-red border-4 border-black"
+          ></div>
+          <div
+            className="bg-white border-4 border-black p-4 md:p-6 shadow-hard hover:shadow-hard-xl transition-all"
+          >
+            <div
+              className="flex flex-col md:flex-row justify-between items-start md:items-center border-b-2 border-dashed border-gray-300 pb-4 mb-4 gap-2"
+            >
+              <h3 className="text-2xl md:text-3xl font-black uppercase">
+                Artificial Intelligence Intern
+              </h3>
+              <span
+                className="font-mono font-bold bg-neo-black text-white px-2 py-1 text-sm whitespace-nowrap"
+                >Oct 2025 - Mar 2026</span
+              >
+            </div>
+            <p
+              className="font-mono text-lg md:text-xl mb-2 text-neo-red font-bold"
+            >
+              @ Brah.ma
+            </p>
+            <ul
+              className="list-disc list-inside font-mono text-sm md:text-base text-gray-700 space-y-1"
+            >
+              <li>
+                Developed AI systems leveraging Knowledge Graphs, Context
+                Understanding, and Intelligent Information Retrieval
+                techniques.
+              </li>
+              <li>
+                Built and optimized Machine Learning and Deep Learning models
+                for semantic search, contextual reasoning, and information
+                extraction.
               </li>
             </ul>
           </div>
