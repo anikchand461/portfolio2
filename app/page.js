@@ -224,11 +224,14 @@ export default function Home() {
       onSubmit = async function (e) {
         e.preventDefault();
         try {
-          await fetch(form.action, {
+          const res = await fetch(form.action, {
             method: "POST",
-            mode: "no-cors",
             body: new FormData(form),
           });
+          const data = await res.json();
+          if (data.result !== "success") {
+            throw new Error(data.error || "Submission failed");
+          }
           const toast = document.getElementById("success-toast");
           toast.classList.remove("opacity-0");
           toast.classList.add("opacity-100");
@@ -2915,7 +2918,7 @@ export default function Home() {
           </div>
           <form
             id="contact-form"
-            action="https://script.google.com/macros/s/AKfycbwoRCPavPCVuaSfllbM-QWxXNWoB3NH7zbOlY67Kv3fyVC_nHOOzBgYcADi8CK1Cf-QmA/exec"
+            action="https://script.google.com/macros/s/AKfycbzECGQskmpnHF8vQFgUPvCZmsh2xFEaeqZ9h-QeWtLhqRpE_LOGMeHFipTDRR-TcZ8/exec"
             method="POST"
             className="space-y-5 md:space-y-6 bg-gray-50 p-4 md:p-6 border-2 border-black"
           >
