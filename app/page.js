@@ -152,6 +152,47 @@ export default function Home() {
     }
     fetchGitHubStats();
 
+    // GitHub contribution heatmap — rendered with GitHub's real dark-theme
+    // palette (not a single-tone tint), using the same level buckets GitHub
+    // itself computes per day.
+    async function renderGithubHeatmap() {
+      const el = document.getElementById("gh-contrib-grid");
+      if (!el) return;
+      const GH_LEVELS = ["#161b22", "#0e4429", "#006d32", "#26a641", "#39d353"];
+      try {
+        const res = await fetch(
+          "https://github-contributions-api.jogruber.de/v4/anikchand461?y=last",
+        );
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        const data = await res.json();
+        const days = data.contributions || [];
+        if (!days.length) throw new Error("empty");
+
+        const firstDow = new Date(days[0].date + "T00:00:00Z").getUTCDay();
+        const weeks = Math.ceil((firstDow + days.length) / 7);
+
+        el.innerHTML = "";
+        el.style.gridTemplateColumns = `repeat(${weeks}, 1fr)`;
+        el.style.aspectRatio = `${weeks} / 7`;
+
+        days.forEach((d, i) => {
+          const dow = (firstDow + i) % 7;
+          const week = Math.floor((firstDow + i) / 7);
+          const cell = document.createElement("div");
+          cell.style.gridColumn = String(week + 1);
+          cell.style.gridRow = String(dow + 1);
+          cell.style.backgroundColor = GH_LEVELS[d.level] || GH_LEVELS[0];
+          cell.style.borderRadius = "1px";
+          cell.title = `${d.date}: ${d.count} contribution${d.count === 1 ? "" : "s"}`;
+          el.appendChild(cell);
+        });
+      } catch (err) {
+        el.innerHTML =
+          '<p class="text-[9px] font-mono text-red-400 col-span-full">Heatmap unavailable.</p>';
+      }
+    }
+    renderGithubHeatmap();
+
     // Scroll reveal animations
     const revealObs = new IntersectionObserver(
       (entries) => {
@@ -876,38 +917,51 @@ export default function Home() {
           className="timeline-dot absolute -left-[14px] top-2 w-6 h-6 bg-neo-red border-4 border-black"
         ></div>
         <div
-          className="bg-white border-4 border-black p-4 md:p-6 shadow-hard hover:shadow-hard-xl transition-all"
+          className="bg-white border-4 border-black p-6 md:p-8 shadow-hard hover:shadow-hard-xl transition-all"
         >
-          <div
-            className="flex flex-col md:flex-row justify-between items-start md:items-center border-b-2 border-dashed border-gray-300 pb-4 mb-4 gap-2"
-          >
-            <h3 className="text-2xl md:text-3xl font-black uppercase">
-                Artificial Intelligence Intern
-            </h3>
-            <span
-              className="font-mono font-bold bg-neo-black text-white px-2 py-1 text-sm whitespace-nowrap"
-              >Aug 2026 - Present</span
+          <div className="flex flex-col md:flex-row gap-6 md:gap-8">
+            <div className="flex-1 min-w-0">
+              <div
+                className="flex flex-col md:flex-row justify-between items-start md:items-center border-b-2 border-dashed border-gray-300 pb-4 mb-4 gap-2"
+              >
+                <h3 className="text-2xl md:text-3xl font-black uppercase">
+                    Artificial Intelligence Intern
+                </h3>
+                <span
+                  className="font-mono font-bold bg-neo-black text-white px-2 py-1 text-sm whitespace-nowrap"
+                  >Aug 2026 - Present</span
+                >
+              </div>
+              <p
+                className="font-mono text-lg md:text-xl mb-2 text-neo-red font-bold"
+              >
+                @ Torque Communications
+              </p>
+              <ul
+                className="list-disc list-inside font-mono text-sm md:text-base text-gray-700 space-y-1"
+              >
+                  <li>
+                    Developing an AI-powered organizational communication platform
+                    for modeling hierarchical structures, communication
+                    relationships, and LLM-based agent interactions.
+                  </li>
+                  <li>
+                    Building graph-based communication workflows with
+                    relationship-level protocols for information sharing,
+                    escalation, and controlled agent-to-agent communication.
+                  </li>
+              </ul>
+            </div>
+            <div
+              className="shrink-0 w-20 h-20 md:w-32 md:h-32 border-4 border-black bg-white flex items-center justify-center self-center md:self-start overflow-hidden"
             >
+              <img
+                src="/Assets/company_logos/torque.png"
+                alt="Torque Communications logo"
+                className="w-full h-full object-contain p-2"
+              />
+            </div>
           </div>
-          <p
-            className="font-mono text-lg md:text-xl mb-2 text-neo-red font-bold"
-          >
-            @ Torque Communications
-          </p>
-          <ul
-            className="list-disc list-inside font-mono text-sm md:text-base text-gray-700 space-y-1"
-          >
-              <li>
-                Developing an AI-powered organizational communication platform
-                for modeling hierarchical structures, communication
-                relationships, and LLM-based agent interactions.
-              </li>
-              <li>
-                Building graph-based communication workflows with
-                relationship-level protocols for information sharing,
-                escalation, and controlled agent-to-agent communication.
-              </li>
-          </ul>
         </div>
       </div>
 
@@ -916,36 +970,49 @@ export default function Home() {
           className="timeline-dot absolute -left-[14px] top-2 w-6 h-6 bg-neo-blue border-4 border-black"
         ></div>
         <div
-          className="bg-white border-4 border-black p-4 md:p-6 shadow-hard hover:shadow-hard-xl transition-all"
+          className="bg-white border-4 border-black p-6 md:p-8 shadow-hard hover:shadow-hard-xl transition-all"
         >
-          <div
-            className="flex flex-col md:flex-row justify-between items-start md:items-center border-b-2 border-dashed border-gray-300 pb-4 mb-4 gap-2"
-          >
-            <h3 className="text-2xl md:text-3xl font-black uppercase">
-                Contributor
-            </h3>
-            <span
-              className="font-mono font-bold bg-neo-black text-white px-2 py-1 text-sm whitespace-nowrap"
-              >Apr 2026 - Jun 2026</span
+          <div className="flex flex-col md:flex-row gap-6 md:gap-8">
+            <div className="flex-1 min-w-0">
+              <div
+                className="flex flex-col md:flex-row justify-between items-start md:items-center border-b-2 border-dashed border-gray-300 pb-4 mb-4 gap-2"
+              >
+                <h3 className="text-2xl md:text-3xl font-black uppercase">
+                    Contributor
+                </h3>
+                <span
+                  className="font-mono font-bold bg-neo-black text-white px-2 py-1 text-sm whitespace-nowrap"
+                  >Apr 2026 - Jun 2026</span
+                >
+              </div>
+              <p
+                className="font-mono text-lg md:text-xl mb-2 text-neo-blue font-bold"
+              >
+                @ Nexus Spring of Code
+              </p>
+              <ul
+                className="list-disc list-inside font-mono text-sm md:text-base text-gray-700 space-y-1"
+              >
+                  <li>
+                    Built a GitHub API rate-limit status indicator with remaining requests,
+                    reset time, color-coded usage status, and low-limit warnings.
+                  </li>
+                  <li>
+                    Rewrote the project documentation from scratch, including setup,
+                    configuration, project structure, dependencies, and contribution guidelines.
+                  </li>
+              </ul>
+            </div>
+            <div
+              className="shrink-0 w-20 h-20 md:w-32 md:h-32 border-4 border-black bg-white flex items-center justify-center self-center md:self-start overflow-hidden"
             >
+              <img
+                src="/Assets/company_logos/nsoc.png"
+                alt="Nexus Spring of Code logo"
+                className="w-full h-full object-contain p-2"
+              />
+            </div>
           </div>
-          <p
-            className="font-mono text-lg md:text-xl mb-2 text-neo-blue font-bold"
-          >
-            @ Nexus Spring of Code
-          </p>
-          <ul
-            className="list-disc list-inside font-mono text-sm md:text-base text-gray-700 space-y-1"
-          >
-              <li>
-                Built a GitHub API rate-limit status indicator with remaining requests,
-                reset time, color-coded usage status, and low-limit warnings.
-              </li>
-              <li>
-                Rewrote the project documentation from scratch, including setup,
-                configuration, project structure, dependencies, and contribution guidelines.
-              </li>
-          </ul>
         </div>
       </div>
       
@@ -955,38 +1022,51 @@ export default function Home() {
             className="timeline-dot absolute -left-[14px] top-2 w-6 h-6 bg-neo-pink border-4 border-black"
           ></div>
           <div
-            className="bg-white border-4 border-black p-4 md:p-6 shadow-hard hover:shadow-hard-xl transition-all"
+            className="bg-white border-4 border-black p-6 md:p-8 shadow-hard hover:shadow-hard-xl transition-all"
           >
-            <div
-              className="flex flex-col md:flex-row justify-between items-start md:items-center border-b-2 border-dashed border-gray-300 pb-4 mb-4 gap-2"
-            >
-              <h3 className="text-2xl md:text-3xl font-black uppercase">
-                Project Admin
-              </h3>
-              <span
-                className="font-mono font-bold bg-neo-black text-white px-2 py-1 text-sm whitespace-nowrap"
-                >Feb 2026 - Mar 2026</span
-              >
-            </div>
-            <p
-              className="font-mono text-lg md:text-xl mb-2 text-neo-pink font-bold"
-            >
-              @ Apertre 3.0
-            </p>
-            <ul
-              className="list-disc list-inside font-mono text-sm md:text-base text-gray-700 space-y-1"
-            >
-              <li>
-                Project Admin for the project 'task' —
-                <span className="break-all"
-                  >https://github.com/anikchand461/task</span
+            <div className="flex flex-col md:flex-row gap-6 md:gap-8">
+              <div className="flex-1 min-w-0">
+                <div
+                  className="flex flex-col md:flex-row justify-between items-start md:items-center border-b-2 border-dashed border-gray-300 pb-4 mb-4 gap-2"
                 >
-              </li>
-              <li>
-                It is a CLI project written in Go for task management using
-                terminal.
-              </li>
-            </ul>
+                  <h3 className="text-2xl md:text-3xl font-black uppercase">
+                    Project Admin
+                  </h3>
+                  <span
+                    className="font-mono font-bold bg-neo-black text-white px-2 py-1 text-sm whitespace-nowrap"
+                    >Feb 2026 - Mar 2026</span
+                  >
+                </div>
+                <p
+                  className="font-mono text-lg md:text-xl mb-2 text-neo-pink font-bold"
+                >
+                  @ Apertre 3.0
+                </p>
+                <ul
+                  className="list-disc list-inside font-mono text-sm md:text-base text-gray-700 space-y-1"
+                >
+                  <li>
+                    Project Admin for the project 'task' —
+                    <span className="break-all"
+                      >https://github.com/anikchand461/task</span
+                    >
+                  </li>
+                  <li>
+                    It is a CLI project written in Go for task management using
+                    terminal.
+                  </li>
+                </ul>
+              </div>
+              <div
+                className="shrink-0 w-20 h-20 md:w-32 md:h-32 border-4 border-black bg-white flex items-center justify-center self-center md:self-start overflow-hidden"
+              >
+                <img
+                  src="/Assets/company_logos/apertre3.png"
+                  alt="Apertre 3.0 logo"
+                  className="w-full h-full object-contain p-2"
+                />
+              </div>
+            </div>
           </div>
         </div>
 
@@ -995,38 +1075,51 @@ export default function Home() {
             className="timeline-dot absolute -left-[14px] top-2 w-6 h-6 bg-neo-red border-4 border-black"
           ></div>
           <div
-            className="bg-white border-4 border-black p-4 md:p-6 shadow-hard hover:shadow-hard-xl transition-all"
+            className="bg-white border-4 border-black p-6 md:p-8 shadow-hard hover:shadow-hard-xl transition-all"
           >
-            <div
-              className="flex flex-col md:flex-row justify-between items-start md:items-center border-b-2 border-dashed border-gray-300 pb-4 mb-4 gap-2"
-            >
-              <h3 className="text-2xl md:text-3xl font-black uppercase">
-                Artificial Intelligence Intern
-              </h3>
-              <span
-                className="font-mono font-bold bg-neo-black text-white px-2 py-1 text-sm whitespace-nowrap"
-                >Oct 2025 - Mar 2026</span
+            <div className="flex flex-col md:flex-row gap-6 md:gap-8">
+              <div className="flex-1 min-w-0">
+                <div
+                  className="flex flex-col md:flex-row justify-between items-start md:items-center border-b-2 border-dashed border-gray-300 pb-4 mb-4 gap-2"
+                >
+                  <h3 className="text-2xl md:text-3xl font-black uppercase">
+                    Artificial Intelligence Intern
+                  </h3>
+                  <span
+                    className="font-mono font-bold bg-neo-black text-white px-2 py-1 text-sm whitespace-nowrap"
+                    >Oct 2025 - Mar 2026</span
+                  >
+                </div>
+                <p
+                  className="font-mono text-lg md:text-xl mb-2 text-neo-red font-bold"
+                >
+                  @ Brah.ma
+                </p>
+                <ul
+                  className="list-disc list-inside font-mono text-sm md:text-base text-gray-700 space-y-1"
+                >
+                  <li>
+                    Developed AI systems leveraging Knowledge Graphs, Context
+                    Understanding, and Intelligent Information Retrieval
+                    techniques.
+                  </li>
+                  <li>
+                    Built and optimized Machine Learning and Deep Learning models
+                    for semantic search, contextual reasoning, and information
+                    extraction.
+                  </li>
+                </ul>
+              </div>
+              <div
+                className="shrink-0 w-20 h-20 md:w-32 md:h-32 border-4 border-black bg-white flex items-center justify-center self-center md:self-start overflow-hidden"
               >
+                <img
+                  src="/Assets/company_logos/brahma.png"
+                  alt="Brah.ma logo"
+                  className="w-full h-full object-contain p-2"
+                />
+              </div>
             </div>
-            <p
-              className="font-mono text-lg md:text-xl mb-2 text-neo-red font-bold"
-            >
-              @ Brah.ma
-            </p>
-            <ul
-              className="list-disc list-inside font-mono text-sm md:text-base text-gray-700 space-y-1"
-            >
-              <li>
-                Developed AI systems leveraging Knowledge Graphs, Context
-                Understanding, and Intelligent Information Retrieval
-                techniques.
-              </li>
-              <li>
-                Built and optimized Machine Learning and Deep Learning models
-                for semantic search, contextual reasoning, and information
-                extraction.
-              </li>
-            </ul>
           </div>
         </div>
 
@@ -1035,37 +1128,50 @@ export default function Home() {
             className="timeline-dot absolute -left-[14px] top-2 w-6 h-6 bg-neo-blue border-4 border-black"
           ></div>
           <div
-            className="bg-white border-4 border-black p-4 md:p-6 shadow-hard hover:shadow-hard-xl transition-all"
+            className="bg-white border-4 border-black p-6 md:p-8 shadow-hard hover:shadow-hard-xl transition-all"
           >
-            <div
-              className="flex flex-col md:flex-row justify-between items-start md:items-center border-b-2 border-dashed border-gray-300 pb-4 mb-4 gap-2"
-            >
-              <h3 className="text-2xl md:text-3xl font-black uppercase">
-                Contributor - Numpy
-              </h3>
-              <span
-                className="font-mono font-bold bg-neo-black text-white px-2 py-1 text-sm whitespace-nowrap"
-                >Oct 2025</span
+            <div className="flex flex-col md:flex-row gap-6 md:gap-8">
+              <div className="flex-1 min-w-0">
+                <div
+                  className="flex flex-col md:flex-row justify-between items-start md:items-center border-b-2 border-dashed border-gray-300 pb-4 mb-4 gap-2"
+                >
+                  <h3 className="text-2xl md:text-3xl font-black uppercase">
+                    Contributor - Numpy
+                  </h3>
+                  <span
+                    className="font-mono font-bold bg-neo-black text-white px-2 py-1 text-sm whitespace-nowrap"
+                    >Oct 2025</span
+                  >
+                </div>
+                <p
+                  className="font-mono text-lg md:text-xl mb-2 text-neo-blue font-bold"
+                >
+                  @ Numpy
+                </p>
+                <ul
+                  className="list-disc list-inside font-mono text-sm md:text-base text-gray-700 space-y-1"
+                >
+                  <li>
+                    Finalized deprecations in linalg/fft modules (PR #29909) to
+                    enhance type safety for ML workflows.
+                  </li>
+                  <li>
+                    Improved library stability for scientific computing and
+                    generative models (e.g., GANs) through robust SVD/FFT
+                    implementations.
+                  </li>
+                </ul>
+              </div>
+              <div
+                className="shrink-0 w-20 h-20 md:w-32 md:h-32 border-4 border-black bg-white flex items-center justify-center self-center md:self-start overflow-hidden"
               >
+                <img
+                  src="/Assets/company_logos/numpy.png"
+                  alt="Numpy logo"
+                  className="w-full h-full object-contain p-2"
+                />
+              </div>
             </div>
-            <p
-              className="font-mono text-lg md:text-xl mb-2 text-neo-blue font-bold"
-            >
-              @ Numpy
-            </p>
-            <ul
-              className="list-disc list-inside font-mono text-sm md:text-base text-gray-700 space-y-1"
-            >
-              <li>
-                Finalized deprecations in linalg/fft modules (PR #29909) to
-                enhance type safety for ML workflows.
-              </li>
-              <li>
-                Improved library stability for scientific computing and
-                generative models (e.g., GANs) through robust SVD/FFT
-                implementations.
-              </li>
-            </ul>
           </div>
         </div>
 
@@ -1074,35 +1180,48 @@ export default function Home() {
             className="timeline-dot absolute -left-[14px] top-2 w-6 h-6 bg-neo-red border-4 border-black"
           ></div>
           <div
-            className="bg-white border-4 border-black p-4 md:p-6 shadow-hard hover:shadow-hard-xl transition-all"
+            className="bg-white border-4 border-black p-6 md:p-8 shadow-hard hover:shadow-hard-xl transition-all"
           >
-            <div
-              className="flex flex-col md:flex-row justify-between items-start md:items-center border-b-2 border-dashed border-gray-300 pb-4 mb-4 gap-2"
-            >
-              <h3 className="text-2xl md:text-3xl font-black uppercase">
-                Contributor - Hactoberfest
-              </h3>
-              <span
-                className="font-mono font-bold bg-neo-black text-white px-2 py-1 text-sm whitespace-nowrap"
-                >Oct 2025</span
+            <div className="flex flex-col md:flex-row gap-6 md:gap-8">
+              <div className="flex-1 min-w-0">
+                <div
+                  className="flex flex-col md:flex-row justify-between items-start md:items-center border-b-2 border-dashed border-gray-300 pb-4 mb-4 gap-2"
+                >
+                  <h3 className="text-2xl md:text-3xl font-black uppercase">
+                    Contributor - Hactoberfest
+                  </h3>
+                  <span
+                    className="font-mono font-bold bg-neo-black text-white px-2 py-1 text-sm whitespace-nowrap"
+                    >Oct 2025</span
+                  >
+                </div>
+                <p className="font-mono text-lg md:text-xl mb-2 text-neo-red font-bold">
+                  @ LocalStack
+                </p>
+                <ul
+                  className="list-disc list-inside font-mono text-sm md:text-base text-gray-700 space-y-1"
+                >
+                  <li>
+                    Normalized documentation structure for the "Reproducible ML with
+                    Cloud Pods" tutorial by adding Introduction and Testing sections
+                    (PR #268).
+                  </li>
+                  <li>
+                    Enhanced developer onboarding by improving clarity and
+                    consistency in AWS emulation guides.
+                  </li>
+                </ul>
+              </div>
+              <div
+                className="shrink-0 w-20 h-20 md:w-32 md:h-32 border-4 border-black bg-white flex items-center justify-center self-center md:self-start overflow-hidden"
               >
+                <img
+                  src="/Assets/company_logos/localstack.png"
+                  alt="LocalStack logo"
+                  className="w-full h-full object-contain p-2"
+                />
+              </div>
             </div>
-            <p className="font-mono text-lg md:text-xl mb-2 text-neo-red font-bold">
-              @ LocalStack
-            </p>
-            <ul
-              className="list-disc list-inside font-mono text-sm md:text-base text-gray-700 space-y-1"
-            >
-              <li>
-                Normalized documentation structure for the "Reproducible ML with
-                Cloud Pods" tutorial by adding Introduction and Testing sections
-                (PR #268).
-              </li>
-              <li>
-                Enhanced developer onboarding by improving clarity and
-                consistency in AWS emulation guides.
-              </li>
-            </ul>
           </div>
         </div>
 
@@ -1111,36 +1230,49 @@ export default function Home() {
             className="timeline-dot absolute -left-[14px] top-2 w-6 h-6 bg-neo-green border-4 border-black"
           ></div>
           <div
-            className="bg-white border-4 border-black p-4 md:p-6 shadow-hard hover:shadow-hard-xl transition-all"
+            className="bg-white border-4 border-black p-6 md:p-8 shadow-hard hover:shadow-hard-xl transition-all"
           >
-            <div
-              className="flex flex-col md:flex-row justify-between items-start md:items-center border-b-2 border-dashed border-gray-300 pb-4 mb-4 gap-2"
-            >
-              <h3 className="text-2xl md:text-3xl font-black uppercase">
-                Machine Learning Trainee
-              </h3>
-              <span
-                className="font-mono font-bold bg-neo-black text-white px-2 py-1 text-sm whitespace-nowrap"
-                >Mar - Sep 2025</span
+            <div className="flex flex-col md:flex-row gap-6 md:gap-8">
+              <div className="flex-1 min-w-0">
+                <div
+                  className="flex flex-col md:flex-row justify-between items-start md:items-center border-b-2 border-dashed border-gray-300 pb-4 mb-4 gap-2"
+                >
+                  <h3 className="text-2xl md:text-3xl font-black uppercase">
+                    Technical Team Member
+                  </h3>
+                  <span
+                    className="font-mono font-bold bg-neo-black text-white px-2 py-1 text-sm whitespace-nowrap"
+                    >Mar 2025 - Sep 2025</span
+                  >
+                </div>
+                <p
+                  className="font-mono text-lg md:text-xl mb-2 text-neo-green font-bold"
+                >
+                  @ ISTE HIT Student Chapter
+                </p>
+                <ul
+                  className="list-disc list-inside font-mono text-sm md:text-base text-gray-700 space-y-1"
+                >
+                  <li>
+                    Executed ML pipelines for student projects, boosting model
+                    accuracy and applying skills to real-world cases.
+                  </li>
+                  <li>
+                    Mentored at BitsNBytes 2025 (ISTE), guiding participants through
+                    technical challenges and advanced DSA problem-solving.
+                  </li>
+                </ul>
+              </div>
+              <div
+                className="shrink-0 w-20 h-20 md:w-32 md:h-32 border-4 border-black bg-white flex items-center justify-center self-center md:self-start overflow-hidden"
               >
+                <img
+                  src="/Assets/company_logos/iste.png"
+                  alt="ISTE HIT Student Chapter logo"
+                  className="w-full h-full object-contain p-2"
+                />
+              </div>
             </div>
-            <p
-              className="font-mono text-lg md:text-xl mb-2 text-neo-green font-bold"
-            >
-              @ ISTE HIT Student Chapter
-            </p>
-            <ul
-              className="list-disc list-inside font-mono text-sm md:text-base text-gray-700 space-y-1"
-            >
-              <li>
-                Executed ML pipelines for student projects, boosting model
-                accuracy and applying skills to real-world cases.
-              </li>
-              <li>
-                Mentored at BitsNBytes 2025 (ISTE), guiding participants through
-                technical challenges and advanced DSA problem-solving.
-              </li>
-            </ul>
           </div>
         </div>
 
@@ -1149,34 +1281,47 @@ export default function Home() {
             className="timeline-dot absolute -left-[14px] top-2 w-6 h-6 bg-neo-blue border-4 border-black"
           ></div>
           <div
-            className="bg-white border-4 border-black p-4 md:p-6 shadow-hard hover:shadow-hard-xl transition-all"
+            className="bg-white border-4 border-black p-6 md:p-8 shadow-hard hover:shadow-hard-xl transition-all"
           >
-            <div
-              className="flex flex-col md:flex-row justify-between items-start md:items-center border-b-2 border-dashed border-gray-300 pb-4 mb-4 gap-2"
-            >
-              <h3 className="text-2xl md:text-3xl font-black uppercase">Mentor</h3>
-              <span
-                className="font-mono font-bold bg-neo-black text-white px-2 py-1 text-sm whitespace-nowrap"
-                >Jul - Sep 2025</span
+            <div className="flex flex-col md:flex-row gap-6 md:gap-8">
+              <div className="flex-1 min-w-0">
+                <div
+                  className="flex flex-col md:flex-row justify-between items-start md:items-center border-b-2 border-dashed border-gray-300 pb-4 mb-4 gap-2"
+                >
+                  <h3 className="text-2xl md:text-3xl font-black uppercase">Mentor</h3>
+                  <span
+                    className="font-mono font-bold bg-neo-black text-white px-2 py-1 text-sm whitespace-nowrap"
+                    >Jul 2025- Sep 2025</span
+                  >
+                </div>
+                <p
+                  className="font-mono text-lg md:text-xl mb-2 text-neo-blue font-bold"
+                >
+                  @ GirlScript Summer of Code
+                </p>
+                <ul
+                  className="list-disc list-inside font-mono text-sm md:text-base text-gray-700 space-y-1"
+                >
+                  <li>
+                    Mentored contributors in Python and ML projects, providing
+                    expert code reviews and advanced debugging guidance.
+                  </li>
+                  <li>
+                    Led interactive sessions to instill best coding practices,
+                    enhance collaboration, and foster high-performing teamwork.
+                  </li>
+                </ul>
+              </div>
+              <div
+                className="shrink-0 w-20 h-20 md:w-32 md:h-32 border-4 border-black bg-white flex items-center justify-center self-center md:self-start overflow-hidden"
               >
+                <img
+                  src="/Assets/company_logos/gssoc.png"
+                  alt="GirlScript Summer of Code logo"
+                  className="w-full h-full object-contain p-2"
+                />
+              </div>
             </div>
-            <p
-              className="font-mono text-lg md:text-xl mb-2 text-neo-blue font-bold"
-            >
-              @ GirlScript Summer of Code
-            </p>
-            <ul
-              className="list-disc list-inside font-mono text-sm md:text-base text-gray-700 space-y-1"
-            >
-              <li>
-                Mentored contributors in Python and ML projects, providing
-                expert code reviews and advanced debugging guidance.
-              </li>
-              <li>
-                Led interactive sessions to instill best coding practices,
-                enhance collaboration, and foster high-performing teamwork.
-              </li>
-            </ul>
           </div>
         </div>
 
@@ -1185,30 +1330,43 @@ export default function Home() {
             className="timeline-dot absolute -left-[14px] top-2 w-6 h-6 bg-neo-pink border-4 border-black"
           ></div>
           <div
-            className="bg-white border-4 border-black p-4 md:p-6 shadow-hard hover:shadow-hard-xl transition-all"
+            className="bg-white border-4 border-black p-6 md:p-8 shadow-hard hover:shadow-hard-xl transition-all"
           >
-            <div
-              className="flex flex-col md:flex-row justify-between items-start md:items-center border-b-2 border-dashed border-gray-300 pb-4 mb-4 gap-2"
-            >
-              <h3 className="text-2xl md:text-3xl font-black uppercase">
-                Winner – Codathon
-              </h3>
-              <span
-                className="font-mono font-bold bg-neo-black text-white px-2 py-1 text-sm whitespace-nowrap"
-                >Feb 2025</span
+            <div className="flex flex-col md:flex-row gap-6 md:gap-8">
+              <div className="flex-1 min-w-0">
+                <div
+                  className="flex flex-col md:flex-row justify-between items-start md:items-center border-b-2 border-dashed border-gray-300 pb-4 mb-4 gap-2"
+                >
+                  <h3 className="text-2xl md:text-3xl font-black uppercase">
+                    Winner – Codathon
+                  </h3>
+                  <span
+                    className="font-mono font-bold bg-neo-black text-white px-2 py-1 text-sm whitespace-nowrap"
+                    >Feb 2025</span
+                  >
+                </div>
+                <p
+                  className="font-mono text-lg md:text-xl mb-2 text-neo-pink font-bold"
+                >
+                  @ ICNSBT at Haldia
+                </p>
+                <ul
+                  className="list-disc list-inside font-mono text-sm md:text-base text-gray-700 space-y-1"
+                >
+                  <li>Secured 1st place for innovative algorithmic solutions.</li>
+                  <li>Delivered optimized solutions under time constraints.</li>
+                </ul>
+              </div>
+              <div
+                className="shrink-0 w-20 h-20 md:w-32 md:h-32 border-4 border-black bg-white flex items-center justify-center self-center md:self-start overflow-hidden"
               >
+                <img
+                  src="/Assets/company_logos/icnsbt.png"
+                  alt="ICNSBT at Haldia logo"
+                  className="w-full h-full object-contain p-2"
+                />
+              </div>
             </div>
-            <p
-              className="font-mono text-lg md:text-xl mb-2 text-neo-pink font-bold"
-            >
-              @ ICNSBT at Haldia
-            </p>
-            <ul
-              className="list-disc list-inside font-mono text-sm md:text-base text-gray-700 space-y-1"
-            >
-              <li>Secured 1st place for innovative algorithmic solutions.</li>
-              <li>Delivered optimized solutions under time constraints.</li>
-            </ul>
           </div>
         </div>
       </div>
@@ -1371,11 +1529,14 @@ export default function Home() {
                   >
                     Matrix_Output
                   </p>
-                  <img
-                    src="https://ghchart.rshah.org/33FF57/anikchand461"
-                    alt="GitHub Contribution Graph"
-                    className="w-full h-auto filter brightness-110"
-                  />
+                  <div
+                    id="gh-contrib-grid"
+                    className="grid grid-rows-7 gap-[2px] w-full"
+                  >
+                    <p className="text-[9px] font-mono text-neo-green/40 col-span-full">
+                      Loading…
+                    </p>
+                  </div>
                 </div>
               </div>
               <div
