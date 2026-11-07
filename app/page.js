@@ -431,7 +431,7 @@ export default function Home() {
             >VIEW DATABASE</a
           >
           <a
-            href="https://drive.google.com/file/d/1GDw5MhyuWT0hpb1vKkjbgXCca0W5UTE_/view?usp=sharing"
+            href="https://drive.google.com/file/d/1yVFrGVlRpx3eviW_P0pD08favuFxtBPJ/view?usp=sharing"
             download
             className="bg-neo-white text-black border-2 border-black px-8 md:px-10 py-4 md:py-5 text-lg md:text-xl font-bold shadow-hard hover:bg-neo-pink hover:text-black hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all cursor-hover flex items-center justify-center gap-2"
           >
@@ -1755,16 +1755,16 @@ export default function Home() {
                   Chat With Repo
               </h3>
               <p className="font-mono text-sm mb-4">
-                  Chat with any GitHub repository using an advanced RAG pipeline with multi-query retrieval, reranking, and grounded AI answers.
+                  AI-powered GitHub repository assistant using an advanced RAG pipeline with multi-query retrieval, RRF, Qdrant search, and Cohere reranking. Built on FastAPI + AWS Lambda with streaming chat across web and Android.
               </p>
               <div className="flex gap-2 font-mono text-xs font-bold flex-wrap">
-                <span className="bg-neo-black text-white px-2 py-1">Python</span
+                <span className="bg-neo-black text-white px-2 py-1">FastAPI</span
                 ><span className="bg-neo-black text-white px-2 py-1"
                   >RAG</span
                 ><span className="bg-neo-black text-white px-2 py-1"
-                  >Developer tool</span
+                  >Qdrant</span
                 ><span className="bg-neo-black text-white px-2 py-1"
-                  >AI</span
+                  >AWS</span
                 ><span className="bg-neo-black text-white px-2 py-1"
                   >Go</span
                 >
